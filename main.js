@@ -1,53 +1,43 @@
 function init() {
-  console.info("initialized"); //console.log,info,error,warn,debug
+  console.info("initialized");
+  const canvas = document.getElementById("game");
 
-  var canvas = document.getElementById("game");
-
-  var stage = new createjs.Stage(canvas);
-
-  var shape = new createjs.Shape();
-
+  let stage = new createjs.Stage(canvas);
+  let shape = new createjs.Shape();
   shape.graphics
       .beginFill('#FF00FF')
       .rect(-10, -10, 20, 20);
   shape.x = 100;
   shape.y = 100;
   shape.rotation = 30;
-
   stage.addChild(shape);
 
-  var ss = new createjs.SpriteSheet({
-    images: ["balls-boom.png"], //16 на 34 кадра
+  let ss = new createjs.SpriteSheet({
+    images: ["balls-boom.png"],
     frames: {
       width: 16,
-      height: 16, //высота и ширина кадра
+      height: 16,
       count: 544,
-      regX: 8, //pivot точка
+      regX: 8,
       regY: 8
     },
-    animations: { //список анимаций
-      one: 42, //один кадр номер 42
-      small: [0, 33, "small"], //с 0 до 33 кадра,
-                               //а потом опять small
+    animations: {
+      one: 42,
+      small: [0, 33, "small"],
       big: [0, 543 - 34, "big"],
-      boom : [544 - 34, 543] //последняя строка
+      boom : [544 - 34, 543]
     }
   });
-  var sprite = new createjs.Sprite(ss);
+
+  let sprite = new createjs.Sprite(ss);
   sprite.x = 200;
   sprite.y = 200;
   sprite.gotoAndPlay("big");
   stage.addChild(sprite);
+  stage.update();
 
-  stage.update(); //это команда на рисование сцены
-
-  //либо давайте запустим таймер, который будет постоянно
-  //перерисовывать сцену
-  createjs.Ticker.framerate = 30; // кадров/сек
+  createjs.Ticker.framerate = 30;
   createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
-  // createjs.Ticker.timingMode = createjs.Ticker.RAF;
-  // createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
-
   createjs.Ticker.on("tick", tick);
 
   function tick() {
@@ -68,14 +58,14 @@ function init() {
     });
   }
 
-  var container = new createjs.Container();
-  var triag = new createjs.Shape();
-  var sq = new createjs.Shape();
-  container.addChild(triag);
+  let container = new createjs.Container();
+  let triangle = new createjs.Shape();
+  let sq = new createjs.Shape();
+  container.addChild(triangle);
   container.addChild(sq);
   stage.addChild(container);
 
-  triag.graphics
+  triangle.graphics
       .beginFill('green')
       .moveTo(0, 0)
       .lineTo(40, 0)
@@ -84,16 +74,15 @@ function init() {
   sq.graphics
       .beginFill('red')
       .rect(0, 0, 30, 30);
-  triag.x = 20;
+  triangle.x = 20;
   container.x = 100;
   container.y = 240;
 
   stage.aaa = 'stage';
   sq.aaa = 'sq';
-  triag.aaa = 'triag';
+  triangle.aaa = 'triangle';
   container.aaa = 'container';
 
-  //on = addEventListener + доп полезные аргументы
   stage.on("click", function(e) {
     console.log('stage click', showEvent(e));
   });
@@ -103,8 +92,8 @@ function init() {
   sq.on("click", function(e) {
     console.log('sq click', showEvent(e));
   });
-  triag.on("click", function(e) {
-    console.log('triag click', showEvent(e));
+  triangle.on("click", function(e) {
+    console.log('triangle click', showEvent(e));
   });
 
   function showEvent(e) {
@@ -121,10 +110,9 @@ function init() {
   function clickListener(e) {
     console.log('click', showEvent(e));
   }
-  //true в конце означает, что мы просим capture фазу
   stage.addEventListener('click', clickListener, true);
   sq.addEventListener('click', clickListener, true);
-  triag.addEventListener('click', clickListener, true);
+  triangle.addEventListener('click', clickListener, true);
   container.addEventListener('click', clickListener, true);
 
   stage.enableMouseOver();
@@ -140,7 +128,7 @@ function init() {
   container.on("mouseout", function() {
     console.log("container mouseout");
   });
-  var square = new createjs.Shape();
+  let square = new createjs.Shape();
   square.graphics
       .beginFill('navy')
       .rect(0, 0, 50, 50);
@@ -148,9 +136,9 @@ function init() {
 
   createjs.Tween.get(square, {})
       .to({x : 400}, 1000)
-      .to({y: 200}, 2000) //измени y до 200
-      .wait(500) //подождать 500 миллисекунд
-      .call(function () { //вызови какой-то код
+      .to({y: 200}, 2000)
+      .wait(500) 
+      .call(function () {
         console.log('here')
       })
       .to({x: 0, alpha: 0.5}, 3000,
