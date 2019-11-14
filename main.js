@@ -137,7 +137,7 @@ function init() {
   createjs.Tween.get(square, {})
       .to({x : 400}, 1000)
       .to({y: 200}, 2000)
-      .wait(500) 
+      .wait(500)
       .call(function () {
         console.log('here')
       })
